@@ -37,4 +37,23 @@ function updateCuisineInfo(region) {
   } else {
     d3.select("#cuisine-details").text("Select a region to see details.");
   }
+
+    // Modal functionality
+    var modal = document.getElementById("welcome-modal");
+    var closeButton = document.querySelector(".close-button");
+  
+    window.onload = function() {
+      modal.style.display = "block";
+    }
+  
+    closeButton.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
 }
+
