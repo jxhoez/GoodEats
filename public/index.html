@@ -15,15 +15,28 @@
     <p><strong>Team Members</strong>: Johny Ho</p>
   </header>
 
-  <h2>Explore World Cuisines</h2>
-  <div id="map-container"></div> <!-- Map Container -->
+  <!-- Project Description -->
+  <div id="project-description">
+    <p>
+      Explore the rich tapestry of global cuisine with our interactive world map. Click on any region to discover its unique culinary traditions, popular dishes, and key ingredients. 
+    </p>
+  </div>
+
+  <!-- Map Container -->
+  <div id="map-container"></div>
 
   <!-- Filters -->
   <div id="filters">
     <label for="region-filter">Region:</label>
     <select id="region-filter">
       <option value="">Select Region</option>
-      <!-- Add options for different regions -->
+      <option value="Asia">Asia</option>
+      <option value="Europe">Europe</option>
+      <option value="North America">North America</option>
+      <option value="South America">South America</option>
+      <option value="Africa">Africa</option>
+      <option value="Oceania">Oceania</option>
+      <option value="Middle East">Middle East</option>
     </select>
   </div>
 
@@ -43,6 +56,7 @@
     </p>
   </footer>
 
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
