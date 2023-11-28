@@ -33,3 +33,16 @@ h1 {
 a {
   text-decoration: none;
 }
+
+main {
+  margin-top: 32px;
+}
+
+#world-map {
+  margin-bottom: 32px;
+}
+
+#map-container {
+  height: 500px; /* Adjust as needed */
+  border: 1px solid #ddd;
+}
