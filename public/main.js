@@ -5,4 +5,5 @@ document.addEventListener('DOMContentLoaded', () => {
       maxZoom: 18,
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
+    console.log(data);
   });
