@@ -102,3 +102,35 @@ header, footer {
 h2 {
   color: #492a7c;
 }
+
+#ingredients-section, #food-images-section {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#ingredients-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#ingredients-list li {
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #4a4a4a;
+}
+
+#food-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+#food-images img {
+  max-width: 200px;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
