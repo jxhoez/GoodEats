@@ -46,3 +46,12 @@ main {
   height: 500px; /* Adjust as needed */
   border: 1px solid #ddd;
 }
+
+#map-container {
+  height: 500px;
+  border: 1px solid #ddd;
+}
+
+#filters, #cuisine-info {
+  margin-top: 20px;
+}

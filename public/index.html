@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <title>Good Eats: A World Cuisine Map</title>
@@ -13,12 +15,23 @@
     <p><strong>Team Members</strong>: Johny Ho</p>
   </header>
 
-  <main>
-    <section id="world-map">
-      <h2>Explore World Cuisines</h2>
-      <div id="map-container"></div>
-    </section>
-  </main>
+  <h2>Explore World Cuisines</h2>
+  <div id="map-container"></div> <!-- Map Container -->
+
+  <!-- Filters -->
+  <div id="filters">
+    <label for="region-filter">Region:</label>
+    <select id="region-filter">
+      <option value="">Select Region</option>
+      <!-- Add options for different regions -->
+    </select>
+  </div>
+
+    <!-- Cuisine Information Display -->
+    <div id="cuisine-info">
+      <h2>Cuisine Information</h2>
+      <p id="cuisine-details">Select a region to see details.</p>
+    </div>  
 
   <footer>
     <p>
@@ -30,7 +43,6 @@
     </p>
   </footer>
 
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
