@@ -1,106 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <title>Good Eats: A World Cuisine Map</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Good Eats: A World Cuisine Map</title>
 </head>
 <body>
-  <header>
-    <h1><a href=".">Good Eats: A World Cuisine Map</a></h1>
-    <p><strong>Team Members</strong>: Johny Ho</p>
-  </header>
+    <header>
+        <h1>Good Eats: A World Cuisine Map</h1>
+        <p><strong>Discover and Tailor Your Global Culinary Journey!</strong></p>
+        <p><strong>Team Members</strong>: Johny Ho</p>
+    </header>
 
-  <div id="welcome-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <h2>Welcome to Good Eats!</h2>
-      <p>Explore the diverse flavors of the world. Click on a region on the map to start your culinary journey!</p>
+    <div id="map-container"></div>
+
+    
+    <div id="filter-container">
+        <label for="category-select">Category:</label>
+        <select id="category-select">
+            <option value="all">All Categories</option>
+            <!-- Options will be dynamically added here -->
+        </select>
+    
+        <label for="area-select">Area:</label>
+        <select id="area-select">
+            <option value="all">All Areas</option>
+            <!-- Options will be dynamically added here -->
+        </select>
+
+        <button id="apply-filters-btn">Apply Filters</button>
+    
+        <!-- Additional filters can be added similarly -->
+        
     </div>
-  </div>
+    
+    <div id="ingredient-network"></div>
 
-  <!-- Project Description -->
-  <div id="project-description">
-    <p>
-      Explore the rich tapestry of global cuisine with our interactive world map. Click on any region to discover its unique culinary traditions, popular dishes, and key ingredients. 
-    </p>
-  </div>
+    <section id="image-gallery">
+        <!-- Images will be dynamically inserted here -->
+    </section>
 
-  <!-- Map Container -->
-  <div id="map-container"></div>
-
-  <!-- Filters -->
-  <div id="filters">
-    <label for="region-filter">Region:</label>
-    <select id="region-filter">
-      <option value="">Select Region</option>
-      <option value="Asia">Asia</option>
-      <option value="Europe">Europe</option>
-      <option value="North America">North America</option>
-      <option value="South America">South America</option>
-      <option value="Africa">Africa</option>
-      <option value="Oceania">Oceania</option>
-      <option value="Middle East">Middle East</option>
-    </select>
-  </div>
-
-    <!-- Cuisine Information Display -->
-    <div id="cuisine-info">
-      <h2>Cuisine Information</h2>
-      <p id="cuisine-details">Select a region to see details.</p>
-    </div>  
-
-  <!-- Food Images Display -->
-  <div id="food-images-section">
-    <h2>Popular Dishes</h2>
-    <div id="food-images">
-    <h3>Add Photos (interact to list the ingredients)</h3>
-      <!-- Placeholder images -->
+    <!-- Details Modal -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Meal Details</h2>
+            <div id="meal-details-content">
+                <!-- Meal details will be inserted dynamically -->
+            </div>
+        </div>
     </div>
-  </div>
-
-      <!-- Ingredients Display -->
-  <div id="ingredients-section">
-    <h2>Key Ingredients</h2>
-    <ul id="ingredients-list">
-      <li></li>
-      <h3>Common Ingredients</h3>
-      <!-- Placeholder ingredients -->
-    </ul>
-  </div>
-
-  <div id="recipe-section">
-    <h2>Traditional Recipe</h2>
-    <div id="recipe-details">
-      <h3 id="recipe-name">Recipe Name</h3>
-      <img id="recipe-image" src="" alt="Recipe Image" />
-      <ul id="recipe-ingredients">
-        <!-- List ingredients here -->
-      </ul>
-      <p id="recipe-instructions">Recipe instructions.</p>
-    </div>
-  </div>
+    
 
 
 
 
+    <footer>
+        <p>Good Eats - Discover the world's flavors!</p>
+        <p>
+            <a href="https://gitlab.cs.washington.edu/cse442/23au/final-project/GoodEats">Repository</a><br>
+            <a href="https://courses.cs.washington.edu/courses/cse442/23au/">CSE 442 Data Visualization</a><br>
+            <a href="https://www.washington.edu">University of Washington</a>
+        </p>
+    </footer>
 
-
-  <footer>
-    <p>
-      <a href="https://gitlab.cs.washington.edu/cse442/23au/final-project/GoodEats">Repository</a>
-      <br>
-      <a href="https://courses.cs.washington.edu/courses/cse442/23au/">CSE 442 Data Visualization</a>
-      <br>
-      <a href="https://www.washington.edu">University of Washington</a>
-    </p>
-  </footer>
-
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="main.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
