@@ -1,11 +1,18 @@
-let globalMealsData = []; // This will hold your meals data
+let globalMealsData = []; // Holds your meals data
+let ingredientSet = new Set(); // Set to track added ingredients
+let globalNodes = new Set();
+let globalLinks = [];
+let simulation;
+let allIngredients = []; // Array to store all ingredients
 
 document.addEventListener('DOMContentLoaded', function() {
     fetch('data.json')
         .then(response => response.json())
         .then(data => {
-            globalMealsData = data.meals; // Store the meals data globally
+            globalMealsData = data.meals;
             initMap(globalMealsData);
+            populateIngredientSet(globalMealsData); // Populate ingredient set
+            createIngredientNetwork(globalMealsData);
 
         const categories = ['Beef', 'Breakfast', 'Chicken', 'Goat', 'Lamb', 'Pasta', 'Pork', 'Seafood', 'Side', 'Starter', 'Vegan', 'Vegetarian'];
         const areas = ['British', 'Malaysian', 'Indian', 'Russian', 'American', 'Mexican', 'Japanese', 'French', 'Jamaican', 'Chinese', 'Dutch', 'Polish', 'Irish', 'Filipino', 'Tunisian', 'Croatian', 'Egyptian', 'Greek', 'Italian', 'Kenyan', 'Moroccan', 'Portuguese', 'Spanish', 'Thai', 'Vietnamese'];
@@ -31,8 +38,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Event listener for the Apply Filters button
- document.getElementById('apply-filters-btn').addEventListener('click', applyFilter);
+    document.getElementById('apply-filters-btn').addEventListener('click', applyFilter);
+    document.getElementById('apply-network-filter-btn').addEventListener('click', applyNetworkFilter);
     // Add event listeners for other filters
+    document.getElementById('network-visualization-btn').addEventListener('click', function() {
+    document.getElementById('ingredient-network-modal').style.display = 'block';
+    createIngredientNetwork(globalMealsData); // Create network when modal opens
+});
+
+document.querySelector('#ingredient-network-modal .close-button').addEventListener('click', function() {
+    document.getElementById('ingredient-network-modal').style.display = 'none';
+});
+
+document.getElementById('details-modal').querySelector('.close-button').addEventListener('click', function() {
+    document.getElementById("details-modal").style.display = "none";
+});
+
+createIngredientNetwork();
 });
 
 function initMap(meals) {
@@ -169,11 +191,227 @@ function showMealDetails(mealId) {
   }
 }
 
+function applyNetworkFilter() {
+    const selectedIngredient = document.getElementById('ingredient-select').value.toLowerCase();
+    filterByIngredient(selectedIngredient);
+}
 
+function filterByIngredient(ingredient) {
+    // Convert ingredient to lowercase for consistent comparison
+    ingredient = ingredient.toLowerCase();
+
+    let filteredNodes = [];
+    let filteredLinks = [];
+
+    if (ingredient === 'all') {
+        // If 'all' is selected, use the global dataset
+        filteredNodes = Array.from(globalNodes);
+        filteredLinks = Array.from(globalLinks);
+    } else {
+        // Filter nodes that are either the selected ingredient or are meals containing that ingredient
+        globalNodes.forEach(node => {
+            if (node.group === 'Ingredient' && node.id === ingredient) {
+                filteredNodes.push(node);
+            } else if (node.group === 'Meal') {
+                let containsIngredient = globalLinks.some(link => (link.target.id === ingredient && link.source.id === node.id));
+                if (containsIngredient) {
+                    filteredNodes.push(node);
+                }
+            }
+        });
+
+        // Filter links to include only those that connect to the selected ingredient
+        globalLinks.forEach(link => {
+            if (link.target.id === ingredient || link.source.id === ingredient) {
+                filteredLinks.push(link);
+            }
+        });
+    }
+
+    // Create the network with the filtered nodes and links
+    createNetwork(filteredNodes, filteredLinks);
+}
+
+
+function populateIngredientSet(mealsData) {
+    ingredientSet.clear(); // Clear existing set
+
+    mealsData.forEach(meal => {
+        for (let i = 1; i <= 20; i++) {
+            let ingredient = meal[`strIngredient${i}`];
+            if (ingredient && ingredient.trim() !== '') {
+                ingredientSet.add(ingredient.toLowerCase());
+            }
+        }
+    });
+
+    populateIngredientDropdown(ingredientSet); // Populate dropdown after set is ready
+}
+
+function populateIngredientDropdown(ingredientSet) {
+    const ingredientSelect = document.getElementById('ingredient-select');
+    ingredientSelect.innerHTML = '<option value="all">All Ingredients</option>';
+
+    // Convert set to array, capitalize and sort
+    const sortedIngredients = Array.from(ingredientSet)
+                                   .map(ingredient => ingredient.charAt(0).toUpperCase() + ingredient.slice(1))
+                                   .sort();
+
+    sortedIngredients.forEach(ingredient => {
+        const option = document.createElement('option');
+        option.value = ingredient.toLowerCase();
+        option.textContent = ingredient;
+        ingredientSelect.appendChild(option);
+    });
+}
+
+function createIngredientNetwork(mealsData) {
+    globalNodes = [];
+    globalLinks = [];
+
+    mealsData.forEach(meal => {
+        let mealNode = { id: meal.idMeal, group: 'Meal', label: meal.strMeal };
+        globalNodes.push(mealNode);
+    
+        for (let i = 1; i <= 20; i++) {
+            let ingredient = meal[`strIngredient${i}`];
+            if (ingredient) {
+                let ingredientNode = { id: ingredient.toLowerCase(), group: 'Ingredient', label: ingredient };
+                if (!globalNodes.some(node => node.id === ingredientNode.id)) {
+                    globalNodes.push(ingredientNode);
+                }
+                globalLinks.push({ source: meal.idMeal, target: ingredient.toLowerCase() });
+            }
+        }
+    });
+
+    createNetwork(globalNodes, globalLinks);
+}
+
+function createNetwork(nodes, links) {
+    d3.select('#network-visualization').selectAll("*").remove();
+
+    const modalContent = document.querySelector('#ingredient-network-modal .modal-content');
+    const width = modalContent.clientWidth;
+    const height = modalContent.clientHeight;
+
+    const svg = d3.select('#network-visualization').append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g');
+
+    const zoomHandler = d3.zoom()
+        .on('zoom', (event) => svg.attr('transform', event.transform));
+    svg.call(zoomHandler);
+
+    simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(d => d.id))
+        .force('charge', d3.forceManyBody())
+        .force('center', d3.forceCenter(width / 2, height / 2));
+
+    let link = svg.append('g')
+        .attr('class', 'links')
+        .selectAll('line')
+        .data(links)
+        .enter().append('line')
+        .attr('stroke-width', 2)
+        .attr('stroke', '#999');
+
+    let node = svg.append('g')
+        .attr('class', 'nodes')
+        .selectAll('circle')
+        .data(nodes)
+        .enter().append('circle')
+        .attr('r', 5)
+        .attr('fill', colorByGroup)
+        .call(drag(simulation))
+        .on('mouseover', mouseOver)
+        .on('mouseout', mouseOut)
+        .on('click', clickNode);
+
+    node.append('title')
+        .text(d => d.label);
+
+    simulation.on('tick', () => {
+        link
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y);
+
+        node
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y);
+    });
+
+    function mouseOver(event, d) {
+        const tooltip = document.getElementById('tooltip');
+        tooltip.style.display = 'block';
+        tooltip.style.left = (event.pageX + 10) + 'px';
+        tooltip.style.top = (event.pageY + 10) + 'px';
+        tooltip.innerHTML = `${d.label}`;
+    }
+    
+    function mouseOut(event, d) {
+        const tooltip = document.getElementById('tooltip');
+        tooltip.style.display = 'none';
+    }
+    
+    function clickNode(event, d) {
+        const infoPanel = document.getElementById('info-panel');
+        infoPanel.innerHTML = `<h3>Details</h3><p>Label: ${d.label}</p><p>Type: ${d.group}</p>`;
+    }
+    
+}
+
+function colorByGroup(d) {
+    return d.group === 'Ingredient' ? 'green' : 'red';
+}
+
+function drag(simulation) {
+    function dragStarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+    }
+
+    function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+    }
+
+    function dragEnded(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+    }
+
+    return d3.drag()
+        .on('start', dragStarted)
+        .on('drag', dragged)
+        .on('end', dragEnded);
+}
 
 // Event listener for closing the modal
 document.querySelector('.close-button').addEventListener('click', function() {
 document.getElementById("details-modal").style.display = "none";
+
+});
+
+document.getElementById('ingredient-filter').addEventListener('change', function(event) {
+    // Filter by the selected ingredient
+    filterByIngredient(event.target.value);
+});
+
+document.getElementById('apply-network-filter-btn').addEventListener('click', function() {
+    const selectedIngredient = document.getElementById('ingredient-select').value;
+    filterByIngredient(selectedIngredient);
 });
 
 
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('apply-network-filter-btn').addEventListener('click', applyNetworkFilter);
+});
+// Call the function with your data
+createIngredientNetwork(globalMealsData);

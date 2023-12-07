@@ -149,6 +149,20 @@ footer {
   background-color: #45a049;
 }
 
+#network-visualization-btn {
+  padding: 8px 15px;
+  background-color: #4CAF50; /* Green */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#network-visualization-btn:hover {
+  background-color: #45a049;
+}
+
 .close-button {
   color: #aaa;
   float: right;
@@ -162,3 +176,45 @@ footer {
   text-decoration: none;
   cursor: pointer;
 }
+
+/* Ingredient Network Modal specific styles */
+#ingredient-network-modal .modal-content {
+  width: 95%; /* Adjust width to fit the screen better */
+  height: 95vh; /* Adjust height to fit the screen better */
+  margin: 2.5vh auto; /* Center the modal */
+  overflow: hidden; /* Prevent scroll bars inside the modal */
+}
+
+#network-visualization {
+  width: 100%; /* Full width of the modal content */
+  height: 85vh; /* Adjust height to give some space for modal header/footer */
+}
+
+.node-details-panel {
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed position on the side of the screen */
+  right: 0; /* Align to the right side */
+  top: 0; /* Align to the top */
+  width: 300px; /* Width of the side panel */
+  height: 100%; /* Full height */
+  background-color: #fff; /* Background color */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  padding: 20px; /* Padding around the content */
+  overflow-y: auto; /* Scrollable if the content is too long */
+  z-index: 1010; /* Above other content */
+}
+
+.suggestions {
+  border: 1px solid #ccc;
+  display: none;
+}
+
+.suggestion-item {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+

@@ -33,11 +33,36 @@
 
         <button id="apply-filters-btn">Apply Filters</button>
     
-        <!-- Additional filters can be added similarly -->
         
+        <!-- Additional filters can be added similarly -->
+        <button id="network-visualization-btn">Ingredient Network</button>
     </div>
     
-    <div id="ingredient-network"></div>
+   
+
+<div id="ingredient-network-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Ingredient Network Visualization</h2>
+        <div id="network-filter-container">
+            <label for="ingredient-select">Filter by Ingredient:</label>
+            <select id="ingredient-select">
+                <option value="all">All Ingredients</option>
+                <!-- Options will be dynamically added here -->
+            </select>
+            <button id="apply-network-filter-btn">Apply Filter</button>
+            <div id="tooltip" style="position: absolute; display: none; background: white; border: 1px solid black; padding: 5px;"></div>
+        </div>
+        <div id="info-panel" style="border: 1px solid black; margin-top: 10px; padding: 5px;">
+            <p>Click on a node to see details here</p>
+        </div>
+          <div id="node-details" style="display:none;">
+            <!-- Node details will be populated here on click -->
+          </div>
+        <div id="network-visualization"></div>
+        
+    </div>
+</div>
 
     <section id="image-gallery">
         <!-- Images will be dynamically inserted here -->
