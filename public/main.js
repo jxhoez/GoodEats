@@ -54,7 +54,18 @@ document.getElementById('details-modal').querySelector('.close-button').addEvent
     document.getElementById("details-modal").style.display = "none";
 });
 
-createIngredientNetwork();
+document.querySelectorAll('.close-button').forEach(button => {
+    button.addEventListener('click', function() {
+        this.closest('.modal').style.display = "none";
+    });
+});
+
+document.getElementById('apply-network-filter-btn').addEventListener('click', function() {
+    const selectedIngredient = document.getElementById('ingredient-select').value;
+    filterByIngredient(selectedIngredient);
+});
+
+createIngredientNetwork(globalMealsData);
 });
 
 function initMap(meals) {
@@ -349,7 +360,7 @@ function createNetwork(nodes, links) {
         tooltip.style.display = 'block';
         tooltip.style.left = (event.pageX + 10) + 'px';
         tooltip.style.top = (event.pageY + 10) + 'px';
-        tooltip.innerHTML = `${d.label}`;
+        tooltip.innerHTML = `<strong>${d.label}</strong> (${d.group})`;
     }
     
     function mouseOut(event, d) {
@@ -365,7 +376,7 @@ function createNetwork(nodes, links) {
 }
 
 function colorByGroup(d) {
-    return d.group === 'Ingredient' ? 'green' : 'red';
+  return d.group === 'Ingredient' ? '#ff8c00' : '#1e90ff'; // Orange for ingredients, Blue for meals
 }
 
 function drag(simulation) {
