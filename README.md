@@ -37,9 +37,9 @@ The application is deployed at: [Good Eats](https://jxhoez.github.io/GoodEats/)
 - **D3.js** (v7) - Data visualization and network graphs
 
 ### Development & Deployment
-- **GitLab Pages** - Static site hosting
-- **GitLab CI/CD** - Continuous deployment
-- **Alpine Linux** - Deployment environment
+- **GitHub Pages** - Static site hosting
+- **GitHub Actions** - Continuous deployment
+- **Ubuntu** - Deployment environment
 
 ## 🏗️ Project Structure
 
@@ -50,7 +50,8 @@ GoodEats/
 │   ├── style.css   # Stylesheet
 │   ├── main.js     # Main JavaScript code
 │   └── data.json   # Dataset
-└── .gitlab-ci.yml  # GitLab CI configuration
+└── .github/        # GitHub configuration
+    └── workflows/  # GitHub Actions workflows
 ```
 
 ## 🚀 Getting Started
