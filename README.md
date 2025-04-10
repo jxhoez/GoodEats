@@ -2,8 +2,6 @@
 
 An interactive web application that helps users explore and discover cuisines from around the world. This project visualizes global culinary traditions and helps users find restaurants and dishes from different cultures. Built with modern web technologies, it offers an engaging way to explore international cuisine through an interactive map interface and ingredient network visualization.
 
-![Good Eats Screenshot](screenshot.png)
-
 ## ✨ Features
 
 ### 🗺️ Interactive Map
